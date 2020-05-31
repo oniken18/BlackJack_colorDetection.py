@@ -172,7 +172,6 @@ class Game2:
                 self.surf.blit(lblSum, (countHand * 80 + 30, 380))
 
                 if hand.Winner != '':
-                    print(hand.Winner)
                     lblWinner = myFont.render(hand.Winner, 4, BLACK_FONT, 3)
                     self.surf.blit(lblWinner, (countHand * 80 + 30, 390))
 
@@ -401,6 +400,7 @@ class Game2:
         self.Bet = bet
         self.Player.reduceMoney(self.Bet)
 
+
     def CheckDealerHand(self):
         currSum = self.Dealer.Hands[0].getSum()
         if currSum <= 16:
@@ -523,7 +523,7 @@ class Game2:
             if not ((self.centerX - 265 <= self.cx <= self.centerX - 235) and (20 <= self.cy <= 60)):
                 self.isCheckAction = False
                 return
-        self.setBet()
+
         self.requestedAction = 'Deal'
         self.myAction = 'Deal'
         self.isCheckAction = False
@@ -655,8 +655,10 @@ class Game2:
                     if not self.isCheckAction and not self.DealerTurn and self.requestedAction == 'bet':
                         # Click Bet
                         if (self.centerX - 265 <= self.cx <= self.centerX - 235) and (20 <= self.cy <= 60):
-                            self.isCheckAction = True
-                            threading.Thread(target=self.tryBet).start()
+                            bet = int((300 - self.betPos[1]) / 200 * self.Player.Money)
+                            if bet > 0:
+                                self.isCheckAction = True
+                                threading.Thread(target=self.tryBet).start()
 
                         # move bet Slider
                         if 100 < self.cy < 300:
