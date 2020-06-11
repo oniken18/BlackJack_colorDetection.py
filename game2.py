@@ -149,6 +149,15 @@ class Game2:
             self.surf.blit(lbl, (self.centerX + 236, 30))
 
             pygame.draw.line(self.surf, BLUE, (self.centerX + 250, 100), (self.centerX + 250, 300), 2)
+
+            if self.tempBet != 0:
+                if self.tempBet > self.Player.Money:
+                    self.tempBet = self.Player.Money
+
+                Tpos = 300 - (self.tempBet / self.Player.Money * 200)
+                self.betPos = (self.betPos[0], int(Tpos))
+                self.tempBet = 0
+
             pygame.draw.rect(self.surf, WHITE, (self.betPos[0], self.betPos[1] - 10, 41, 20), 0)
 
             bet = int((300 - self.betPos[1]) / 200 * self.Player.Money)
@@ -398,8 +407,8 @@ class Game2:
     def setBet(self):
         bet = int((300 - self.betPos[1]) / 200 * self.Player.Money)
         self.Bet = bet
+        self.tempBet = bet
         self.Player.reduceMoney(self.Bet)
-
 
     def CheckDealerHand(self):
         currSum = self.Dealer.Hands[0].getSum()
@@ -527,6 +536,7 @@ class Game2:
         self.requestedAction = 'Deal'
         self.myAction = 'Deal'
         self.isCheckAction = False
+        self.setBet()
 
     def CheckPlayerHand(self, nmHand):
         currCards = self.Player.Hands[nmHand].cards
